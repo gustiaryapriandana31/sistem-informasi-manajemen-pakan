@@ -18,11 +18,11 @@
             <div class="flex flex-row justify-between bg-orange-200 p-5 rounded-md my-2">
                 <div>
                     <h1 class="text-2xl font-bold font-roboto text-blue-400">{{ $budidaya->nama_budidaya }}</h1>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->tanggal_tebar }}</p>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->jumlah_tebar_ikan }}</p>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->bobot_awal_ikan }}</p>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->ikan->nama_ikan }}</p>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->pakan->nama_pakan }}</p>
+                    <p class="text-gray-400 font-semibold font-poppins text-sm">Tanggal mulai budidaya : {{ \Carbon\Carbon::parse($budidaya->tanggal_tebar)->locale('id')->translatedFormat('d F Y') }}</p>
+                    <p class="text-gray-400 font-semibold font-poppins text-sm">Jumlah ikan yang ditebar : {{ $budidaya->jumlah_tebar_ikan }} ekor</p>
+                    <p class="text-gray-400 font-semibold font-poppins text-sm">Bobot awal ikan : {{ $budidaya->bobot_awal_ikan }} kg</p>
+                    <p class="text-gray-400 font-semibold font-poppins text-sm">Nama ikan : {{ $budidaya->ikan->nama_ikan }}</p>
+                    <p class="text-gray-400 font-semibold font-poppins text-sm">Nama pakan : {{ $budidaya->pakan->nama_pakan }}</p>
                 </div>
                 <div class="">
                     <a href="{{ route('budidaya.index') }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Kembali</a>
@@ -37,12 +37,6 @@
                     @endauth
                     <table class="mx-auto bg-amber-100/80 my-5 text-left table-auto w-full">
                         <thead class="border border-slate-800 p-4 md:text-base text-[0.77rem] text-center font-bold font-poppins">
-                            <th className="md:py-2 md:px-5 bg-orange-300/80 border border-slate-600 md:text-base text-xs">
-                                Kode Budidaya
-                            </th>
-                            <th className="md:py-2 md:px-5 bg-orange-300/80 border border-slate-600 md:text-base text-xs">
-                                Nama Budidaya
-                            </th>
                             <th className="md:py-2 md:px-5 bg-orange-300/80 border border-slate-600 md:text-base text-xs">
                                 Nama Ikan
                             </th>
@@ -60,19 +54,13 @@
                             @foreach ($budidaya->feedings as $feeding)
                                 <tr class="text-center">
                                     <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
-                                        {{ $feeding->budidaya->id_budidaya}}
-                                    </td>
-                                    <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
-                                        {{ $feeding->budidaya->nama_budidaya}}
-                                    </td>
-                                    <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
                                         {{ $feeding->budidaya->ikan->nama_ikan}}
                                     </td>
                                     <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
                                         {{ $feeding->budidaya->pakan->nama_pakan}}
                                     </td>
                                     <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
-                                        {{ $feeding->tanggal_feeding}}
+                                        {{ \Carbon\Carbon::parse($feeding->tanggal_feeding)->locale('id')->translatedFormat('d F Y')}}
                                     </td>
                                     <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
                                         {{ $feeding->berat_pakan}}
@@ -88,9 +76,12 @@
                     <h4 class="text-base font-semibold font-roboto text-blue-400">{{ $budidaya->nama_budidaya }}</h4>
 
                     @if($budidaya->panen)
-                        <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->panen->tanggal_panen }}</p>
-                        <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->panen->bobot_akhir_ikan }}</p>
-                        {{-- <p class="text-gray-400 font-semibold font-poppins text-sm">Nilai EP : {{ $nilai_ep }}</p> --}}
+                        <p class="text-gray-400 font-semibold font-poppins text-sm">Tanggal panen : {{ \Carbon\Carbon::parse($budidaya->panen->tanggal_panen)->locale('id')->translatedFormat('d F Y') }}</p>
+                        <p class="text-gray-400 font-semibold font-poppins text-sm">Berat akhir ikan : {{ $budidaya->panen->bobot_akhir_ikan }} kg</p>
+                        <p class="text-orange-400 font-semibold font-poppins text-sm">Nilai EP : {{ round($nilai_ep, 2) }}%</p>
+                        <p class="text-yellow-400 font-semibold font-poppins text-sm">Nilai FCR : {{ round($nilai_fcr, 2) }}</p>
+                        <p class="text-gray-700 font-semibold font-poppins text-sm">* Jadi, dibutuhkan {{ round($nilai_fcr, 2) }} kg pakan untuk menghasilkan 1kg ikan </p>
+                        <p class="text-gray-700 font-semibold font-poppins text-sm">* Diketahui bahwa 1 kg pakan dapat menghasilkan {{ round($nilai_fcr_reverse, 2) }} ons ikan</p>
                     @else
                         <p class="text-red-500 font-semibold font-poppins text-sm">Data panen belum diisi.</p>
                     @endif

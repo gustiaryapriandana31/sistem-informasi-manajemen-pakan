@@ -19,17 +19,6 @@ class BudidayaController extends Controller
             'budidayas' => Budidaya::with(['ikan', 'panen'])->latest()->get()
         ]);
     }
-    
-    // /**
-    //  * Display a listing of the resource.
-    //  */
-    // public function index_for_user()
-    // {
-    //     return view('layouts.crud-budidaya.index_guest', [
-    //         'budidayas' => Budidaya::with(['ikan', 'panen'])->latest()->get()
-    //     ]);
-    // }
-
 
     /**
      * Show the form for creating a new resource.
@@ -81,11 +70,31 @@ class BudidayaController extends Controller
     //    Eager loading relasi feedings dan panen
         $budidaya = $budidaya->load(['feedings', 'panen']);
 
+        if($budidaya->feedings->isEmpty() || $budidaya->panen === null) {
+            $fcrValue = 0;
+            $fcrReverseValue = 0;
+            $epValue = 0;  
+        } else {
+            // Menghitung nilai FCR
+            $fcrValue = 0;
+            $fcrValue += $budidaya->feedings->sum('berat_pakan') / ($budidaya->panen->bobot_akhir_ikan - $budidaya->bobot_awal_ikan);
+            
+            // Menghitung nilai FCR Reverse
+            $fcrReverseValue = 0;
+            $fcrReverseValue += ($budidaya->panen->bobot_akhir_ikan - $budidaya->bobot_awal_ikan) / $budidaya->feedings->sum('berat_pakan');
+            
+            // Menghitung nilai EP
+            $epValue = 0;
+            $epValue += ($budidaya->panen->bobot_akhir_ikan - $budidaya->bobot_awal_ikan) / $budidaya->feedings->sum('berat_pakan') * 100;
+        }
+
         // Kirim data ke view
         return view('layouts.crud-budidaya.show', [
             'title' => 'Detail ' . $budidaya->nama_budidaya,
             'budidaya' => $budidaya,
-            // 'nilai_ep' => $epValue
+            'nilai_fcr' => $fcrValue,
+            'nilai_fcr_reverse' => $fcrReverseValue,
+            'nilai_ep' => $epValue
         ]);
 
     }
@@ -137,9 +146,5 @@ class BudidayaController extends Controller
     {
         Budidaya::destroy($budidaya->id_budidaya); // perintah untuk delete dari database table Post
         return redirect(route('budidaya.index'))->with('success', 'Data Budidaya Berhasil Dihapus.');
-    }
-
-    public function hitungEP() {
-        
     }
 }

@@ -17,16 +17,15 @@
 
         <div class="p-6">
             @auth
-                <a href="{{ route('budidaya.create') }}" class="mb-3 inline-block p-2 rounded-md bg-orange-500 text-white font-bold text-base">Tambah Data +</a>
+                <a href="{{ route('budidaya.create') }}" class="mb-3 inline-block p-2 rounded-md bg-blue-500 text-white font-bold text-base">Tambah Data +</a>
             @endauth
             @foreach ($budidayas as $budidaya)
-                <div class="flex flex-row justify-between bg-orange-100 shadow-lg p-5 rounded-md my-3">
+                <div class="flex flex-row justify-between bg-blue-700 shadow-lg p-5 rounded-md my-3">
                     <div class="">
-                        <h1 class="text-2xl font-bold font-roboto text-blue-400">{{ $budidaya->id_budidaya }}</h1>
-                        <h1 class="text-2xl font-bold font-roboto text-blue-400">{{ $budidaya->nama_budidaya }}</h1>
-                        <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->tanggal_tebar }}</p>
-                        <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->jumlah_tebar_ikan }}</p>
-                        <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->bobot_awal_ikan }}</p>
+                        <h1 class="text-2xl font-bold font-roboto text-white">{{ $budidaya->nama_budidaya }}</h1>
+                        <p class="text-gray-400 font-semibold font-poppins text-sm">Tanggal mulai budidaya :  {{ \Carbon\Carbon::parse($budidaya->tanggal_tebar)->locale('id')->translatedFormat('d F Y') }}</p>
+                        <p class="text-gray-400 font-semibold font-poppins text-sm">Jumlah ikan yang ditebar : {{ $budidaya->jumlah_tebar_ikan }} ekor</p>
+                        <p class="text-gray-400 font-semibold font-poppins text-sm">Bobot awal ikan : {{ $budidaya->bobot_awal_ikan }} kg</p>
                     </div>
                     <div class="">
                         <a href="{{ route('budidaya.show', $budidaya->id_budidaya) }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Detail</a>
