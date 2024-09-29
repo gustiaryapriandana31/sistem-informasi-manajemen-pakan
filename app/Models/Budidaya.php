@@ -11,6 +11,12 @@ class Budidaya extends Model
     protected $primaryKey = 'id_budidaya';
     public $incrementing = false;
     protected $keyType = 'string';
+    
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
     protected $with = ['ikan', 'pakan'];
 
     protected $fillable = [

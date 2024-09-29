@@ -31,8 +31,10 @@
          
             <section class="flex flex-row gap-10 items-center">
                 <div class="basis-2/3">
-                    <a href="{{ route('feeding.create', [$budidaya->id_budidaya]) }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Catat Feeding</a>
-                    <a href="{{ route('panen.create', [$budidaya->id_budidaya]) }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Catat Hasil Panen</a>
+                    @auth
+                        <a href="{{ route('feeding.create', [$budidaya->id_budidaya]) }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Catat Feeding</a>
+                        <a href="{{ route('panen.create', [$budidaya->id_budidaya]) }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Catat Hasil Panen</a>
+                    @endauth
                     <table class="mx-auto bg-amber-100/80 my-5 text-left table-auto w-full">
                         <thead class="border border-slate-800 p-4 md:text-base text-[0.77rem] text-center font-bold font-poppins">
                             <th className="md:py-2 md:px-5 bg-orange-300/80 border border-slate-600 md:text-base text-xs">
@@ -84,9 +86,14 @@
                 <div class="basis-1/3 shadow-md p-3 rounded-md my-5 w-full">
                     <h1 class="text-2xl font-bold font-roboto text-orange-400">Laporan Hasil Panen</h1>
                     <h4 class="text-base font-semibold font-roboto text-blue-400">{{ $budidaya->nama_budidaya }}</h4>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->panen->tanggal_panen }}</p>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->panen->bobot_akhir_ikan }}</p>
-                    {{-- <p class="text-gray-400 font-semibold font-poppins text-sm">Nilai EP : {{ $nilai_ep }}</p> --}}
+
+                    @if($budidaya->panen)
+                        <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->panen->tanggal_panen }}</p>
+                        <p class="text-gray-400 font-semibold font-poppins text-sm">{{ $budidaya->panen->bobot_akhir_ikan }}</p>
+                        {{-- <p class="text-gray-400 font-semibold font-poppins text-sm">Nilai EP : {{ $nilai_ep }}</p> --}}
+                    @else
+                        <p class="text-red-500 font-semibold font-poppins text-sm">Data panen belum diisi.</p>
+                    @endif
                 </div>
             </section>
         </main>

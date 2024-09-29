@@ -16,7 +16,9 @@
         </div>
 
         <div class="p-6">
-            <a href="{{ route('budidaya.create') }}" class="mb-3 inline-block p-2 rounded-md bg-orange-500 text-white font-bold text-base">Tambah Data +</a>
+            @auth
+                <a href="{{ route('budidaya.create') }}" class="mb-3 inline-block p-2 rounded-md bg-orange-500 text-white font-bold text-base">Tambah Data +</a>
+            @endauth
             @foreach ($budidayas as $budidaya)
                 <div class="flex flex-row justify-between bg-orange-100 shadow-lg p-5 rounded-md my-3">
                     <div class="">
@@ -28,14 +30,16 @@
                     </div>
                     <div class="">
                         <a href="{{ route('budidaya.show', $budidaya->id_budidaya) }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Detail</a>
-                        <a href="/budidaya/{{ $budidaya->id_budidaya }}/edit" class="bg-yellow-400 text-white px-3 py-1 rounded-md">Edit</a>
-                        <form action="{{ route('budidaya.show', $budidaya->id_budidaya) }}" method="post" class="mt-2 inline-block">
-                            @method('delete')
-                            @csrf
-                            <button class="bg-red-400 text-white font-poppins font-semibold text-xs p-2 rounded-lg" onclick="return confirm('Yakin Ingin Menghapus Data Ini?')">
-                                Hapus
-                            </button>
-                        </form>
+                        @auth
+                            <a href="/budidaya/{{ $budidaya->id_budidaya }}/edit" class="bg-yellow-400 text-white px-3 py-1 rounded-md">Edit</a>
+                            <form action="{{ route('budidaya.show', $budidaya->id_budidaya) }}" method="post" class="mt-2 inline-block">
+                                @method('delete')
+                                @csrf
+                                <button class="bg-red-400 text-white font-poppins font-semibold text-xs p-2 rounded-lg" onclick="return confirm('Yakin Ingin Menghapus Data Ini?')">
+                                    Hapus
+                                </button>
+                            </form>
+                        @endauth
                     </div>
                 </div>
             @endforeach

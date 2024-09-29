@@ -16,9 +16,19 @@ class BudidayaController extends Controller
     public function index()
     {
         return view('layouts.crud-budidaya.index', [
-            'budidayas' => Budidaya::latest()->paginate(5)
+            'budidayas' => Budidaya::with(['ikan', 'panen'])->latest()->get()
         ]);
     }
+    
+    // /**
+    //  * Display a listing of the resource.
+    //  */
+    // public function index_for_user()
+    // {
+    //     return view('layouts.crud-budidaya.index_guest', [
+    //         'budidayas' => Budidaya::with(['ikan', 'panen'])->latest()->get()
+    //     ]);
+    // }
 
 
     /**
@@ -68,14 +78,8 @@ class BudidayaController extends Controller
      */
     public function show(Budidaya $budidaya)
     {
-       // Eager loading relasi feedings dan panen
+    //    Eager loading relasi feedings dan panen
         $budidaya = $budidaya->load(['feedings', 'panen']);
-
-        // Menghitung total pakan dari relasi feedings
-        // $totalPakan = $budidaya->feedings->sum('berat_pakan');
-
-        // Hitung EP Value
-        // $epValue = ((($budidaya->panen->bobot_akhir + 100) - $budidaya->bobot_awal_ikan) / $totalPakan) * 100;
 
         // Kirim data ke view
         return view('layouts.crud-budidaya.show', [
