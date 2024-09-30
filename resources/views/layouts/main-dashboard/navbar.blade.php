@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row items-center">
         <div class="md:w-1/3 justify-center md:justify-start text-white">
             <a href="#" aria-label="Home">
-                <span class="text-3xl pl-6 shadow-lg text-orange-500 font-caveat">WEB MANAJEMEN PAKAN</span>
+                <span class="text-3xl pl-6 shadow-lg text-white/80 hover:text-sky-400 font-caveat text-center">FEECOS TEAM</span>
             </a>
         </div>
 

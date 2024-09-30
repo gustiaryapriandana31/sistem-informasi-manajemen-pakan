@@ -18,6 +18,7 @@ class Panen extends Model
     protected $fillable = [
         'id_budidaya',
         'bobot_akhir_ikan',
+        'bobot_mati_ikan',
         'tanggal_panen'
     ];
 

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('panens', function (Blueprint $table) {
             $table->string('id_budidaya', 50); 
+            $table->decimal('bobot_mati_ikan', 10, 2);
             $table->decimal('bobot_akhir_ikan', 10, 2);
             $table->date('tanggal_panen');
             $table->timestamps();

@@ -39,13 +39,13 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        Periode Budidaya
+                                        Tanggal Tebar
                                     </td>
                                     <td>
                                         :
                                     </td>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($budidaya->tanggal_tebar)->locale('id')->translatedFormat('d F Y') }} - {{ $budidaya->panen == null ? '???' : \Carbon\Carbon::parse($budidaya->panen->tanggal_panen)->locale('id')->translatedFormat('d F Y') }}
+                                        {{ \Carbon\Carbon::parse($budidaya->tanggal_tebar)->locale('id')->translatedFormat('d F Y') }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -76,13 +76,54 @@
 
                             <h1 class="text-lg md:text-xl font-semibold font-roboto text-orange-400">Laporan Hasil Panen</h1>    
                             @if($budidaya->panen)
-                                <p class="text-gray-400 font-semibold font-poppins text-sm">Tanggal panen : {{ \Carbon\Carbon::parse($budidaya->panen->tanggal_panen)->locale('id')->translatedFormat('d F Y') }}</p>
-                                <p class="text-gray-700 font-semibold font-poppins text-sm">* Jadi, dibutuhkan {{ round($nilai_fcr, 2) }} kg pakan untuk menghasilkan 1kg ikan </p>
-                                <p class="text-gray-700 font-semibold font-poppins text-sm">* Diketahui bahwa 1 kg pakan dapat menghasilkan {{ round($nilai_fcr_reverse, 2) }} ons ikan</p>
+                                <table class="mx-auto my-5 text-left table-auto w-full md:text-base text-xs">
+                                    <tr>
+                                        <td class="">
+                                            Berat Total Pakan
+                                        </td>
+                                        <td class="mr-4 block">
+                                            :
+                                        </td>
+                                        <td>
+                                            {{ round($sum_of_feeding) }} kg
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Tanggal Panen
+                                        </td>
+                                        <td>
+                                            :
+                                        </td>
+                                        <td>
+                                            {{ $budidaya->panen == null ? '???' : \Carbon\Carbon::parse($budidaya->panen->tanggal_panen)->locale('id')->translatedFormat('d F Y') }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Lama Hari Budidaya
+                                        </td>
+                                        <td>
+                                            :
+                                        </td>
+                                        @php
+                                            // Mengonversi tanggal tebar menjadi objek Carbon
+                                            $tanggal_tebar = \Carbon\Carbon::parse($budidaya->tanggal_tebar);
+                                            
+                                            // Memeriksa apakah tanggal panen tersedia
+                                            $tanggal_panen = $budidaya->panen ? \Carbon\Carbon::parse($budidaya->panen->tanggal_panen) : null;
+
+                                            // Menghitung lama hari budidaya
+                                            $lama_budidaya = $tanggal_panen ? $tanggal_tebar->diffInDays($tanggal_panen) : '???';
+                                        @endphp
+                                        <td>
+                                            {{ $lama_budidaya === '???' ? 'Belum panen' : $lama_budidaya . ' hari' }}
+                                        </td>
+                                    </tr>
+                                </table>
                             @else
                                 <p class="text-red-eb500 font-semibold font-poppins text-sm">Data panen belum diisi.</p>
                             @endif
-
                         </main>
 
                         {{-- Card --}}
@@ -103,7 +144,7 @@
                             </div>
                             <div class="text-center">
                                 <h5>Berat Total Pakan</h5>
-                                <p class="mt-4 font-poppins text-lg md:text-2xl text-yellow-400 font-semibold">300 kg</p>
+                                <p class="mt-4 font-poppins text-lg md:text-2xl text-yellow-400 font-semibold">{{ round($sum_of_feeding) }} kg</p>
                             </div>
 
                             <div class="text-center mt-0 md:mt-8">
@@ -118,6 +159,19 @@
                             </div>
                         </div>
                     </section>
+
+                    <main class="basis-1/2 shadow-sm p-1 rounded-md w-full mt-3">
+                        <h1 class="text-lg md:text-xl font-semibold font-roboto text-yellow-400">Kesimpulan dan Rekomendasi</h1>  
+                        @if($budidaya->panen)
+                            <p class="text-gray-700 font-semibold font-poppins text-sm">* Jadi, dibutuhkan {{ round($nilai_fcr, 2) }} kg pakan untuk menghasilkan 1 kg ikan </p>
+                            <p class="text-gray-700 font-semibold font-poppins text-sm">* Diketahui bahwa 1 kg pakan dapat menghasilkan {{ round($nilai_fcr_reverse, 2) }} ons ikan</p>
+
+                            <p class="text-green-400 text-sm font-poppins my-3"><span class="font-bold text-base">Nilai EP</span> untuk jenis ikan {{ $budidaya->ikan->nama_ikan }} tersebut {{ $recommendation_based_on_ep_result }}</p>
+                            <p class="text-green-400 text-sm font-poppins"><span class="font-bold text-base">Nilai FCR</span> untuk jenis ikan {{ $budidaya->ikan->nama_ikan }} tersebut {{ $recommendation_based_on_fcr_result }}</p>
+                            @else
+                            <p class="text-red-eb500 font-semibold font-poppins text-sm">Data panen belum diisi.</p>
+                        @endif
+                    </main>
                 </section>
              
                 {{-- Feeding Table --}}

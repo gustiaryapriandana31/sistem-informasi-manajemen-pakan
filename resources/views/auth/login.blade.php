@@ -1,6 +1,6 @@
-<x-guest-layout>
+<x-guest-layout className="bg-gray-400">
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}">
         @csrf

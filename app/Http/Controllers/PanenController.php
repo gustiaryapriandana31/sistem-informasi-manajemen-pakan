@@ -28,6 +28,7 @@ class PanenController extends Controller
         try {
             $validatedData = $request->validate([                 
                 'bobot_akhir_ikan' => 'required',
+                'bobot_mati_ikan' => 'required',
                 'tanggal_panen' => 'required|date', 
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {

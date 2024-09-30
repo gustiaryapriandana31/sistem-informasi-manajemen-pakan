@@ -7,8 +7,7 @@
                 <h1 class="font-bold pl-2"><i class="fa-regular fa-copy pr-3"></i>Catat Data Panen</h1>
             </div>
         </div>
-        <p class="text-orange-500 text-center font-semibold font-poppins text-sm">"Pastikan semua data terisi ya :D"</p>
-
+    
         <main class="p-6">
             <div class="bg-white rounded-lg shadow shadow-sky-200 p-4">
                 <form action="{{ route('panen.store', [$budidaya->id_budidaya]) }}" method="POST">
@@ -20,6 +19,14 @@
                         <label for="bobot_akhir_ikan" class="block mb-3 text-gray-700 text-sm font-bold">Bobot akhir ikan</label>
                         <input type="text" name="bobot_akhir_ikan" id="bobot_akhir_ikan" class="w-full border-b-2 focus:outline-none focus:border-b-sky-300 p-3 rounded-md text-sky-400 @error('bobot_akhir_ikan') is-invalid @enderror" value="{{ old('bobot_akhir_ikan') }}">
                         @error('bobot_akhir_ikan')
+                            <p class="text-orange-500 text-xs italic">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="p-3">
+                        <label for="bobot_mati_ikan" class="block mb-3 text-gray-700 text-sm font-bold">Bobot ikan yang mati</label>
+                        <input type="text" name="bobot_mati_ikan" id="bobot_mati_ikan" class="w-full border-b-2 focus:outline-none focus:border-b-sky-300 p-3 rounded-md text-sky-400 @error('bobot_mati_ikan') is-invalid @enderror" value="{{ old('bobot_mati_ikan') }}">
+                        @error('bobot_mati_ikan')
                             <p class="text-orange-500 text-xs italic">{{ $message }}</p>
                         @enderror
                     </div>
