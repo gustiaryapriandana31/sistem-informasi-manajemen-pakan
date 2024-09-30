@@ -2,13 +2,12 @@
 
 @section('container')
     <div class="main-content flex-1 bg-gray-100 mt-12 md:mt-2 pb-24 md:pb-5">
-        <div class="bg-gray-800 pt-3">
+        <div class="bg-gray-800 pt-12 md:pt-3">
             <div class="rounded-tl-3xl bg-gradient-to-r from-blue-900 to-gray-800 p-4 shadow text-2xl text-white">
-                <h1 class="font-bold pl-2">Catat Data <span class="italic">Feeding</span></h1>
+                <h1 class="font-bold pl-2"><i class="fa-regular fa-copy pr-3"></i>Catat Data <span class="italic">Feeding</span></h1>
             </div>
         </div>
-        <p class="text-orange-500 text-center font-semibold font-poppins text-sm">"Pastikan semua data terisi ya :D"</p>
-
+    
         <main class="p-6">
             <div class="bg-white rounded-lg shadow shadow-sky-200 p-4">
                 <form action="{{ route('feeding.store', [$budidaya->id_budidaya]) }}" method="POST">
@@ -44,7 +43,7 @@
                     
                     <div class="px-3">
                        <a href="{{ route('budidaya.show', $budidaya->id_budidaya) }}" class="inline-block bg-slate-400 text-white py-2 px-4 rounded-full hover:font-bold hover:bg-grey-400 cursor-pointer">Batal</a>
-                        <button type="submit" class="bg-blue-400 text-white py-2 px-4 rounded-full hover:font-bold hover:bg-sky-400 cursor-pointer">Simpan</button>
+                        <button type="submit" class="bg-blue-400 text-white py-2 px-4 rounded-full hover:font-bold hover:bg-sky-400 cursor-pointer">Catat</button>
                     </div>
                 </form>
             </div>

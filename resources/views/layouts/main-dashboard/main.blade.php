@@ -9,8 +9,10 @@
         {{-- Font from Google Font--}}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Caveat+Brush&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?amily=Poppins:wght@400;500;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Caveat+Brush&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Audiowide&display=swap&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+
+        <link rel="stylesheet" href={{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}>
 
         <!-- Styles -->
         <style>
@@ -25,8 +27,9 @@
             @include('layouts.main-dashboard.navbar')
         </header>
 
-        <main>
+        <main class="flex">
             @include('layouts.main-dashboard.sidebar')
+            @yield('container')
         </main>
 
         <script>
@@ -43,9 +46,9 @@
                 a = div.getElementsByTagName("a");
                 for (i = 0; i < a.length; i++) {
                     if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                        a[i].style.display = "";
+                        a[i].style.display = "block";
                     } else {
-                        a[i].style.display = "none";
+                        a[i].style.display = "hidden";
                     }
                 }
             }

@@ -7,87 +7,168 @@
         </div> 
     @endif
 
-    <div class="main-content flex-1 bg-gray-100 mt-12 md:mt-2 pb-24 md:pb-5">
-        <div class="bg-gray-800 pt-3">
-            <div class="rounded-tl-3xl bg-gradient-to-r from-blue-900 to-gray-800 p-4 shadow text-2xl text-white">
-                <h1 class="font-bold pl-2">Detail Data Budidaya {{ $budidaya->nama_budidaya }}</h1>
-            </div>
-        </div>
-
-        <main class="p-6">
-            <div class="flex flex-row justify-between bg-orange-200 p-5 rounded-md my-2">
-                <div>
-                    <h1 class="text-2xl font-bold font-roboto text-blue-400">{{ $budidaya->nama_budidaya }}</h1>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">Tanggal mulai budidaya : {{ \Carbon\Carbon::parse($budidaya->tanggal_tebar)->locale('id')->translatedFormat('d F Y') }}</p>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">Jumlah ikan yang ditebar : {{ $budidaya->jumlah_tebar_ikan }} ekor</p>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">Bobot awal ikan : {{ $budidaya->bobot_awal_ikan }} kg</p>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">Nama ikan : {{ $budidaya->ikan->nama_ikan }}</p>
-                    <p class="text-gray-400 font-semibold font-poppins text-sm">Nama pakan : {{ $budidaya->pakan->nama_pakan }}</p>
+    <section class="w-screen">
+        <div class="min-h-screen flex-1 bg-white mt-12 md:mt-2 pb-24 md:pb-5">
+            <div class="bg-gray-800 pt-12 md:pt-3">
+                <div class="rounded-tl-3xl bg-gradient-to-r from-blue-900 to-gray-800 p-4 shadow text-2xl text-white">
+                    <h1 class="font-bold pl-2"><i class="fa-solid fa-eye pr-3"></i>Detail Data Budidaya {{ $budidaya->nama_budidaya }}</h1>
                 </div>
+            </div>
+    
+            <main class="p-6">
                 <div class="">
-                    <a href="{{ route('budidaya.index') }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Kembali</a>
-                </div>
-            </div>
-         
-            <section class="flex flex-row gap-10 items-center">
-                <div class="basis-2/3">
+                    <a href="{{ url()->previous() }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Kembali</a>
+                </div>  
+                <section class="p-5 rounded-md my-2 border border-gray-600">
+                    <p class="text-blue-400 text-center text-2xl md:text-4xl font-bold font-roboto mb-5">{{ $budidaya->nama_budidaya }}</p>
+                    <section class="flex flex-col md:flex-row justify-between items-center">
+                        {{-- Report --}}
+                        <main class="basis-1/2 shadow-md p-1 rounded-md w-full">
+                            <h1 class="text-lg md:text-xl font-semibold font-roboto text-yellow-400">Laporan Awal Budidaya</h1>    
+                            <table class="mx-auto my-5 text-left table-auto w-full md:text-base text-xs">
+                                <tr>
+                                    <td class="">
+                                        Estimasi Waktu Budidaya
+                                    </td>
+                                    <td class="mr-4 block">
+                                        :
+                                    </td>
+                                    <td>
+                                        {{ $budidaya->lama_budidaya }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Periode Budidaya
+                                    </td>
+                                    <td>
+                                        :
+                                    </td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($budidaya->tanggal_tebar)->locale('id')->translatedFormat('d F Y') }} - {{ $budidaya->panen == null ? '???' : \Carbon\Carbon::parse($budidaya->panen->tanggal_panen)->locale('id')->translatedFormat('d F Y') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Nama Ikan
+                                    </td>
+                                    <td>
+                                        :
+                                    </td>
+                                    <td>
+                                        {{ $budidaya->ikan->nama_ikan }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Nama Pakan
+                                    </td>
+                                    <td>
+                                        :
+                                    </td>
+                                    <td>
+                                        {{ $budidaya->pakan->nama_pakan }}
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <hr class="border-2 border-orange-400 my-4">
+
+                            <h1 class="text-lg md:text-xl font-semibold font-roboto text-orange-400">Laporan Hasil Panen</h1>    
+                            @if($budidaya->panen)
+                                <p class="text-gray-400 font-semibold font-poppins text-sm">Tanggal panen : {{ \Carbon\Carbon::parse($budidaya->panen->tanggal_panen)->locale('id')->translatedFormat('d F Y') }}</p>
+                                <p class="text-gray-700 font-semibold font-poppins text-sm">* Jadi, dibutuhkan {{ round($nilai_fcr, 2) }} kg pakan untuk menghasilkan 1kg ikan </p>
+                                <p class="text-gray-700 font-semibold font-poppins text-sm">* Diketahui bahwa 1 kg pakan dapat menghasilkan {{ round($nilai_fcr_reverse, 2) }} ons ikan</p>
+                            @else
+                                <p class="text-red-eb500 font-semibold font-poppins text-sm">Data panen belum diisi.</p>
+                            @endif
+
+                        </main>
+
+                        {{-- Card --}}
+                        <div class="basis-1/2 grid grid-cols-2 text-gray-600 font-semibold gap-8">
+                            <div class="text-center mt-4 md:mt-0">
+                                <h5>Jumlah Tebar Awal</h5>
+                                <p class="mt-4 font-poppins text-lg md:text-2xl text-yellow-400 font-semibold">{{ $budidaya->jumlah_tebar_ikan }} ekor</p>
+                            </div>
+                            <div class="text-center mt-4 md:mt-0">
+                                <h5>Bobot Awal Tebar</h5>
+                                <p class="mt-4 font-poppins text-lg md:text-2xl text-yellow-400 font-semibold">{{ $budidaya->bobot_awal_ikan }} kg</p>
+                            </div>
+                            <div class="text-center">
+                                <h5>Bobot Ikan Akhir</h5>
+                                <p class="mt-4 font-poppins text-lg md:text-2xl text-yellow-400 font-semibold">
+                                    {{ $budidaya->panen == null ? '-' : $budidaya->panen->bobot_akhir_ikan . ' kg' }}
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <h5>Berat Total Pakan</h5>
+                                <p class="mt-4 font-poppins text-lg md:text-2xl text-yellow-400 font-semibold">300 kg</p>
+                            </div>
+
+                            <div class="text-center mt-0 md:mt-8">
+                                <h5>Nilai Efisiensi Pakan</h5>
+                                <p class="mt-4 font-poppins text-lg md:text-2xl text-yellow-400 font-semibold">{{ round($nilai_ep, 2) }}%</p>
+                            </div>
+                            <div class="text-center mt-0 md:mt-8">
+                                <h5>Nilai Rasio Konversi Pakan</h5>
+                                <p class="mt-4 font-poppins text-lg md:text-2xl text-yellow-400 font-semibold">
+                                    {{ round($nilai_fcr, 2) }}
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+             
+                {{-- Feeding Table --}}
+                <div class="w-full">
                     @auth
                         <a href="{{ route('feeding.create', [$budidaya->id_budidaya]) }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Catat Feeding</a>
                         <a href="{{ route('panen.create', [$budidaya->id_budidaya]) }}" class="bg-blue-400 text-white px-3 py-1 rounded-md">Catat Hasil Panen</a>
                     @endauth
-                    <table class="mx-auto bg-amber-100/80 my-5 text-left table-auto w-full">
-                        <thead class="border border-slate-800 p-4 md:text-base text-[0.77rem] text-center font-bold font-poppins">
-                            <th className="md:py-2 md:px-5 bg-orange-300/80 border border-slate-600 md:text-base text-xs">
-                                Nama Ikan
+                    <table class="mx-auto bg-amber-100/80 my-5 text-center md:text-left table-auto w-full border-collapse border border-slate-600">
+                        <thead class="border border-slate-800 md:p-4 text-center font-bold font-poppins md:text-base text-xs">
+                            <th className="md:py-2 md:px-5">
+                                No
                             </th>
-                            <th className="md:py-2 md:px-5 bg-orange-300/80 border border-slate-600 md:text-base text-xs">
-                                Nama Pakan
-                            </th>
-                            <th className="md:py-2 md:px-5 bg-orange-300/80 border border-slate-600 md:text-base text-xs">
+                            <th className="md:py-2 md:px-5">
                                 Tanggal Feeding
                             </th>
-                            <th className="md:py-2 md:px-5 bg-orange-300/80 border border-slate-600 md:text-base text-xs">
+                            <th className="md:py-2 md:px-5">
                                 Berat Pakan
                             </th>
+                            <th className="md:py-2 md:px-5">
+                                Jangka Waktu Pemberian
+                            </th>
+                            <th className="md:py-2 md:px-5">
+                                Total hari
+                            </th>
                         </thead>
-                        <tbody class="border border-slate-500">
+                        <tbody class="border border-slate-500 md:text-base text-xs">
                             @foreach ($budidaya->feedings as $feeding)
-                                <tr class="text-center">
-                                    <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
-                                        {{ $feeding->budidaya->ikan->nama_ikan}}
+                            <tr class="text-center border border-slate-800">
+                                    <td className="md:p-1">
+                                        {{ $loop->iteration }}
                                     </td>
-                                    <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
-                                        {{ $feeding->budidaya->pakan->nama_pakan}}
-                                    </td>
-                                    <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
+                                    <td className="md:p-1">
                                         {{ \Carbon\Carbon::parse($feeding->tanggal_feeding)->locale('id')->translatedFormat('d F Y')}}
                                     </td>
-                                    <td className="border border-slate-600 p-1 md:text-base text-xs" colSpan={colSpan}>
+                                    <td className="md:p-1">
                                         {{ $feeding->berat_pakan}}
+                                    </td>
+                                    <td className="md:p-1">
+                                        {{ $feeding->jangka_waktu}}
+                                    </td>
+                                    <td className="md:p-1">
+                                        {{ $feeding->jangka_waktu === 'Seminggu' ? '7 hari' : ($feeding->jangka_waktu === 'Sehari' ? '1 hari' : ($feeding->jangka_waktu === 'Sebulan' ? '28 hari' : '- hari')) }}
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                
-                <div class="basis-1/3 shadow-md p-3 rounded-md my-5 w-full">
-                    <h1 class="text-2xl font-bold font-roboto text-orange-400">Laporan Hasil Panen</h1>
-                    <h4 class="text-base font-semibold font-roboto text-blue-400">{{ $budidaya->nama_budidaya }}</h4>
-
-                    @if($budidaya->panen)
-                        <p class="text-gray-400 font-semibold font-poppins text-sm">Tanggal panen : {{ \Carbon\Carbon::parse($budidaya->panen->tanggal_panen)->locale('id')->translatedFormat('d F Y') }}</p>
-                        <p class="text-gray-400 font-semibold font-poppins text-sm">Berat akhir ikan : {{ $budidaya->panen->bobot_akhir_ikan }} kg</p>
-                        <p class="text-orange-400 font-semibold font-poppins text-sm">Nilai EP : {{ round($nilai_ep, 2) }}%</p>
-                        <p class="text-yellow-400 font-semibold font-poppins text-sm">Nilai FCR : {{ round($nilai_fcr, 2) }}</p>
-                        <p class="text-gray-700 font-semibold font-poppins text-sm">* Jadi, dibutuhkan {{ round($nilai_fcr, 2) }} kg pakan untuk menghasilkan 1kg ikan </p>
-                        <p class="text-gray-700 font-semibold font-poppins text-sm">* Diketahui bahwa 1 kg pakan dapat menghasilkan {{ round($nilai_fcr_reverse, 2) }} ons ikan</p>
-                    @else
-                        <p class="text-red-500 font-semibold font-poppins text-sm">Data panen belum diisi.</p>
-                    @endif
-                </div>
-            </section>
-        </main>
-    </div>
+            </main>
+        </div>
+    </section>
 @endsection
 
